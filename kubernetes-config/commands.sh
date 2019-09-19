@@ -20,4 +20,6 @@ k apply -f prometheus.yml
 k port-forward svc/prometheus-service 9090:9090 > /dev/null &
 
 
+# deploy wildfly
+k apply -f wildfly.yml
 
