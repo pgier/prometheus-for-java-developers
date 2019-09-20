@@ -1,0 +1,54 @@
+---
+# Deployment of Promtheus with mounted configmap
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wildfly-deployment
+  labels:
+    app: wildfly
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wildfly
+  template:
+    metadata:
+      labels:
+        app: wildfly
+      annotations:
+        demo.io/should_be_scraped: "true"
+    spec:
+      containers:
+      - name: wildfly
+        image: wildfly-metrics-example
+        # Need to override the default command to allow all connections to the management interface for built in metrics.
+        command: ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
+        ports:
+        - containerPort: 8080
+        - containerPort: 9990
+---
+# Service exposing wildfly application port
+apiVersion: v1
+kind: Service
+metadata:
+  name: wildfly-service
+spec:
+  selector:
+    app: wildfly
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8080
+---
+# Service exposing wildfly admin port
+apiVersion: v1
+kind: Service
+metadata:
+  name: wildfly-admin-service
+spec:
+  selector:
+    app: wildfly
+  ports:
+    - protocol: TCP
+      port: 9991
+      targetPort: 9990
