@@ -8,10 +8,10 @@
 alias k=kubectl
 
 # Create the prometheus configmap
-k apply -f prometheus-config.yml
+k apply -f prometheus-setup.yml
 
 # Deploy Prometheus
-k apply -f prometheus.yml
+k apply -f prometheus-deployment.yml
 
 # Attach local port to prometheus-service.  Run in the background
 # so that we can still run commands.
