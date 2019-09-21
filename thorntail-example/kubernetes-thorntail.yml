@@ -1,0 +1,41 @@
+---
+# Deployment of Promtheus with mounted configmap
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thorntail-deployment
+  labels:
+    app: thorntail
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thorntail
+  template:
+    metadata:
+      labels:
+        app: thorntail
+      annotations:
+        demo.io/should_be_scraped: "true"
+    spec:
+      containers:
+      - name: thorntail
+        image: thorntail-example:latest
+        imagePullPolicy: Never
+        # Need to override the default command to allow all connections to the management interface for built in metrics.
+        ports:
+        - containerPort: 8080
+---
+# Service exposing wildfly application port
+apiVersion: v1
+kind: Service
+metadata:
+  name: thorntail-service
+spec:
+  type: NodePort
+  selector:
+    app: thorntail
+  ports:
+    - protocol: TCP
+      port: 8080
+      nodePort: 30081
