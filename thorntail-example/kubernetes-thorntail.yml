@@ -1,5 +1,5 @@
 ---
-# Deployment of Promtheus with mounted configmap
+# Deployment of app
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,7 +22,6 @@ spec:
       - name: thorntail
         image: thorntail-example:latest
         imagePullPolicy: Never
-        # Need to override the default command to allow all connections to the management interface for built in metrics.
         ports:
         - containerPort: 8080
 ---
@@ -38,4 +37,4 @@ spec:
   ports:
     - protocol: TCP
       port: 8080
-      nodePort: 30081
+      nodePort: 30082
