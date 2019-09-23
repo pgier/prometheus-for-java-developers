@@ -1,0 +1,40 @@
+---
+# Deployment of app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quarkus-deployment
+  labels:
+    app: quarkus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quarkus
+  template:
+    metadata:
+      labels:
+        app: quarkus
+      annotations:
+        demo.io/should_be_scraped: "true"
+    spec:
+      containers:
+      - name: quarkus
+        image: quarkus-example:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+---
+# Service exposing application port
+apiVersion: v1
+kind: Service
+metadata:
+  name: quarkus-service
+spec:
+  type: NodePort
+  selector:
+    app: quarkus
+  ports:
+    - protocol: TCP
+      port: 8080
+      nodePort: 30083
