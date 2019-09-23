@@ -1,0 +1,53 @@
+---
+# Deployment of app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jmx-example-deployment
+  labels:
+    app: jmx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jmx
+  template:
+    metadata:
+      labels:
+        app: jmx
+      annotations:
+        demo.io/should_be_scraped: "true"
+    spec:
+      containers:
+      - name: jmx
+        image: jmx-example:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        - containerPort: 8081
+---
+# Service exposing application port
+apiVersion: v1
+kind: Service
+metadata:
+  name: jmx-example-service
+spec:
+  type: NodePort
+  selector:
+    app: jmx
+  ports:
+  - protocol: TCP
+    port: 8080
+    nodePort: 30081
+---
+# Service exposing jmx exporter port
+apiVersion: v1
+kind: Service
+metadata:
+  name: jmx-exporter-service
+spec:
+  selector:
+    app: jmx
+  ports:
+  - protocol: TCP
+    port: 8081
