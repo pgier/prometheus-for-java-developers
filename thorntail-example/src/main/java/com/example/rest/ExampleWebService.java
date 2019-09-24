@@ -14,7 +14,7 @@ public class ExampleWebService {
 
     static final Counter requestsCompleted = Counter.build()
             .name("hello_requests_completed").help("Total requests.").labelNames("status").register();
-   static final Gauge inprogressRequests = Gauge.build()
+    static final Gauge inprogressRequests = Gauge.build()
             .name("hello_requests_active").help("Currently active requests.").register();
 
     @GET
@@ -31,11 +31,11 @@ public class ExampleWebService {
         } finally {
             inprogressRequests.dec();
         }
-        return Response.ok("Hello from Thorntail App!").build();
+        return Response.ok("Hello from Thorntail App!\n").build();
     }
 
     final static double MAX_SLEEP_TIME_SECONDS = 10;
-    final static double SLEEP_TIME_STANDARD_DEVIATION = MAX_SLEEP_TIME_SECONDS / 10;
+    final static double SLEEP_TIME_STANDARD_DEVIATION = 2.0;
     final static double ERR_RATE = 1.0 / 20.0;
 
     private Random random = new Random();
@@ -60,7 +60,7 @@ public class ExampleWebService {
      * @return random double
      */
     private double generateRandomTime(double upperBound, double standardDeviation) {
-        double time = (random.nextGaussian() + (upperBound / 2)) * standardDeviation;
+        double time = (random.nextGaussian() * standardDeviation) + (upperBound / 2);
         return Math.min(Math.max(time, 0), upperBound);
     }
 }

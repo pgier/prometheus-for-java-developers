@@ -15,7 +15,7 @@ public class HelloResourceTest {
           .when().get("/hello")
           .then()
              .statusCode(200)
-             .body(is("Hello from Quarkus App!"));
+             .body(is("Hello from Quarkus App!\n"));
     }
 
 }

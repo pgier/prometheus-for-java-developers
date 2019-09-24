@@ -1,7 +1,5 @@
 package com.example.jmx;
 
-import java.time.Instant;
-
 public class HitCounter implements HitCounterMBean {
 
     private int hits = 0;
