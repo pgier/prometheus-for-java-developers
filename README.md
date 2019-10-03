@@ -2,7 +2,27 @@
 
 This repository contains some examples for using prometheus with Java applications.
 
-## Prepare Kubernetes
+## Simple HTTP with metrics textfile
+
+The directory `http-textfile-metrics` contains a very simple Java HTTP server which serves
+a metrics textfile which can be collected by Prometheus.  To run the example, first
+start Prometheus using the example config file.
+
+```
+prometheus --config-file http-textfile-metrics/prometheus-config.yml
+```
+
+Then run the Java HTTP server and modify metrics.txt to see changes in prometheus.
+```
+http-textfile-metrics/run.sh
+```
+
+The example metrics will be available on `http://localhost:8080`, and the Prometheus web
+interface will be available on `http://localhost:9090`.
+
+## Examples using Kubernetes
+
+### Prepare Kubernetes
 
 Install [minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/) or point kubectl at a running
 instance of kubernetes.
@@ -30,7 +50,7 @@ of domain names instead of ip addresses, just add the IP of minikube to /etc/hos
   minikube ip
 ```
 
-## Install Prometheus
+### Install Prometheus into Kubernetes
 
 The kubernetes-config directory contains deployment configuration for Prometheus.
 
